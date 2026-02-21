@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>web dev assignment (smart event dashboard) </title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      /* margin: 10000; */
+      background-color: #22a9de;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: rgb(7, 222, 161);
+      margin-bottom: 30px;
+    }
+
+    .container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 34px;
+    }
+
+    .card {
+      background: #e2e2e2;
+      padding: 20px;
+      border-radius: 21px;
+      width: 50%;
+      box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      /* margin-top: 10; */
+      color: #235ea6;
+    }
+ 
+    input, select, textarea, button {
+      width: 99%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+    }
+
+    button {
+      background: #2ab7ca;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .event-item {
+      background: white;
+      padding: 10px;
+      margin: 10px 0; 
+      border-left: 4px solid #2ab7ca;
+      border-radius: 6px;
+      position: relative;
+    }
+
+    .delete-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: red;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .dom-demo {
+      background: #f2f2f2;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .key-box {
+      background: #ddd;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1> Smart Event Dashboard</h1>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Add New Event</h2>
+      <form id="eventForm">
+        <label>Event Title:</label>
+        <input type="text" id="title" required>
+
+        <label>Event Date:</label>
+        <input type="date" id="date" required>
+
+        <label>Category:</label>
+        <select id="category">
+          <option>Conference</option>
+          <option>Workshop</option>
+          <option>Meeting</option>
+        </select>
+
+        <label>Description:</label>
+        <textarea id="description"></textarea>
+
+        <button type="submit">Add Event</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>My Events</h2>
+      <button id="clearAll">Clear All Events</button>
+      <div id="eventList">
+        <p id="emptyMsg">No events yet. Add your first event!</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="dom-demo">
+    <h2>DOM Manipulation Demo</h2>
+    <div class="key-box">
+      <strong>You Pressed:</strong> <span id="keyDisplay">None</span>
+    </div>
+  </div>
+
+<script>
+  const form = document.getElementById("eventForm");
+  const eventList = document.getElementById("eventList");
+  const emptyMsg = document.getElementById("emptyMsg");
+  const clearAllBtn = document.getElementById("clearAll");
+  const keyDisplay = document.getElementById("keyDisplay");
+
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const title = document.getElementById("title").value;
+    const date = document.getElementById("date").value;
+    const category = document.getElementById("category").value;
+    const description = document.getElementById("description").value;
+
+    const eventDiv = document.createElement("div");
+    eventDiv.className = "event-item";
+
+    eventDiv.innerHTML = `
+      <strong>${title}</strong><br>
+      <small>${date} | ${category}</small>
+      <p>${description}</p>
+      <button class="delete-btn">X</button>
+    `;
+
+    eventList.appendChild(eventDiv);
+    emptyMsg.style.display = "none";
+
+    form.reset();
+  });
+
+  eventList.addEventListener("click", function(e) {
+    if (e.target.classList.contains("delete-btn")) {
+      e.target.parentElement.remove();
+    }
+
+    if (eventList.children.length === 1) {
+      emptyMsg.style.display = "block";
+    }
+  });
+
+  clearAllBtn.addEventListener("click", function() {
+    eventList.innerHTML = "";
+    eventList.appendChild(emptyMsg);
+    emptyMsg.style.display = "block";
+  });
+
+  document.addEventListener("keydown", function(e) {
+    keyDisplay.textContent = e.key;
+  });
+
+</script>
+
+</body>
+</html>
